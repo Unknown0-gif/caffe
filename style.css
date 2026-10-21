@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Digital Kafe</title>
+    <!-- Menghubungkan file HTML dengan file CSS eksternal -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ========================================== -->
+    <!-- 1. HALAMAN UTAMA (MENU LIST)               -->
+    <!-- ========================================== -->
+    <section id="halaman-utama" class="halaman">
+        <!-- Header Kafe -->
+        <header class="header">
+            <div class="info-kafe">
+                <h1>Kopi Senja Utama</h1>
+                <span class="badge-meja">Meja No. 05</span>
+            </div>
+            <!-- Banner Foto Kafe -->
+            <img src="images/hero-banner.jpg" alt="Suasana Kafe" class="banner-img">
+        </header>
+
+        <!-- Pencarian & Filter Kategori -->
+        <div class="search-filter-container">
+            <input type="text" id="search-input" placeholder="Cari kopi atau makanan...">
+            <div class="kategori-buttons">
+                <button class="btn-kategori active" onclick="filterKategori('semua')">Semua</button>
+                <button class="btn-kategori" onclick="filterKategori('minuman')">Minuman</button>
+                <button class="btn-kategori" onclick="filterKategori('makanan')">Makanan</button>
+            </div>
+        </div>
+
+        <!-- Daftar Kartu Menu (Product Grid) -->
+        <main class="menu-grid">
+            <!-- Kartu Menu 1 -->
+            <div class="card-menu" data-kategori="minuman">
+                <img src="images/kopi-susu.jpg" alt="Es Kopi Susu Aren" class="card-img">
+                <div class="card-body">
+                    <h3>Es Kopi Susu Aren</h3>
+                    <p class="harga">Rp 20.000</p>
+                    <button class="btn-detail" onclick="bukaDetail('Es Kopi Susu Aren', 20000, 'images/kopi-susu.jpg', 'Kopi espresso racikan lokal dipadukan dengan susu segar dan gula aren asli yang manis gurih.')">Lihat Detail</button>
+                </div>
+            </div>
+
+            <!-- Kartu Menu 2 -->
+            <div class="card-menu" data-kategori="makanan">
+                <img src="images/croissant.jpg" alt="Butter Croissant" class="card-img">
+                <div class="card-body">
+                    <h3>Butter Croissant</h3>
+                    <p class="harga">Rp 25.000</p>
+                    <button class="btn-detail" onclick="bukaDetail('Butter Croissant', 25000, 'images/croissant.jpg', 'Roti pastry khas Prancis yang renyah di luar, lembut dan kaya rasa mentega di dalam.')">Lihat Detail</button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Floating Bar Pesanan (Garis Bawah Layar) -->
+        <div class="floating-bar">
+            <div>
+                <span class="label-total">Total Pesanan:</span>
+                <p id="floating-total" class="total-harga">Rp 0</p>
+            </div>
+            <button class="btn-utama" onclick="tampilkanHalaman('halaman-nota')">Lihat Nota Pesanan</button>
+        </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 2. HALAMAN DESKRIPSI (PRODUCT DETAIL)     -->
+    <!-- ========================================== -->
+    <section id="halaman-deskripsi" class="halaman hidden">
+        <button class="btn-kembali" onclick="tampilkanHalaman('halaman-utama')">&larr; Kembali ke Menu</button>
+        
+        <div class="detail-container">
+            <!-- Gambar Produk Besar -->
+            <img id="detail-img" src="" alt="Detail Produk" class="detail-img">
+            
+            <div class="detail-body">
+                <h2 id="detail-nama">Nama Produk</h2>
+                <p id="detail-harga" class="harga-besar">Rp 0</p>
+                <p id="detail-deskripsi" class="deskripsi-teks">Deskripsi lengkap produk akan muncul di sini.</p>
+                
+                <!-- Opsi Catatan -->
+                <div class="form-group">
+                    <label for="catatan-khusus">Catatan Khusus (Opsional):</label>
+                    <textarea id="catatan-khusus" placeholder="Contoh: Kurangi gula, tanpa es, atau tidak pedas..."></textarea>
+                </div>
+
+                <!-- Pengatur Jumlah -->
+                <div class="jumlah-container">
+                    <span>Jumlah:</span>
+                    <div class="counter">
+                        <button onclick="ubahJumlah(-1)">-</button>
+                        <span id="jumlah-item">1</span>
+                        <button onclick="ubahJumlah(1)">+</button>
+                    </div>
+                </div>
+
+                <button class="btn-utama full-width" onclick="tambahKeNota()">+ Masukkan ke Nota Pesanan</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 3. HALAMAN NOTA PEMBAYARAN (INVOICE)      -->
+    <!-- ========================================== -->
+    <section id="halaman-nota" class="halaman hidden">
+        <button class="btn-kembali" onclick="tampilkanHalaman('halaman-utama')">&larr; Tambah Menu Lain</button>
+
+        <div class="nota-box">
+            <div class="nota-header">
+                <h2>Kopi Senja Utama</h2>
+                <p>Nota Pesanan Sementara</p>
+                <small>Meja No. 05 | Waktu: <span id="waktu-pesan"></span></small>
+            </div>
+
+            <hr class="garis-putus">
+
+            <!-- Daftar Item Pesanan -->
+            <div id="daftar-nota" class="daftar-nota">
+                <!-- Diisi secara otomatis oleh JavaScript -->
+                <p class="pesan-kosong">Belum ada pesanan yang dipilih.</p>
+            </div>
+
+            <hr class="garis-putus">
+
+            <!-- Ringkasan Biaya -->
+            <div class="rincian-biaya">
+                <div class="baris-biaya">
+                    <span>Subtotal</span>
+                    <span id="nota-subtotal">Rp 0</span>
+                </div>
+                <div class="baris-biaya">
+                    <span>Pajak (10%)</span>
+                    <span id="nota-pajak">Rp 0</span>
+                </div>
+                <div class="baris-biaya total-akhir">
+                    <strong>Total Bayar</strong>
+                    <strong id="nota-total-akhir">Rp 0</strong>
+                </div>
+            </div>
+
+            <!-- Pilihan Metode Pembayaran -->
+            <div class="metode-pembayaran">
+                <label>Pilih Metode Pembayaran:</label>
+                <select id="select-pembayaran">
+                    <option value="kasir">Bayar di Kasir (Tunai / EDC)</option>
+                    <option value="qris">QRIS (GoPay/OVO/Dana/ShopeePay)</option>
+                </select>
+            </div>
+
+            <button class="btn-utama full-width" onclick="konfirmasiPesanan()">Kirim Pesanan ke Dapur</button>
+        </div>
+    </section>
+
+    <!-- Menghubungkan file HTML dengan JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
